@@ -1,6 +1,8 @@
 package com.dalhousie.habit.controller
 
+import com.dalhousie.habit.request.LoginRequest
 import com.dalhousie.habit.request.RegisterRequest
+import com.dalhousie.habit.response.LoginResponse
 import com.dalhousie.habit.response.RegisterResponse
 import com.dalhousie.habit.service.AuthService
 import jakarta.validation.Valid
@@ -19,5 +21,11 @@ class AuthController(private val authService: AuthService) {
     fun register(@Valid @RequestBody registerRequest: RegisterRequest): ResponseEntity<RegisterResponse> {
         val body = authService.registerUser(registerRequest)
         return ResponseEntity(body, HttpStatus.CREATED)
+    }
+
+    @PostMapping("/login")
+    fun loginUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        val body = authService.loginUser(loginRequest)
+        return ResponseEntity(body, HttpStatus.OK)
     }
 }
