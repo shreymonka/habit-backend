@@ -1,7 +1,9 @@
 package com.dalhousie.habit.controller
 
+import com.dalhousie.habit.request.ForgotPasswordRequest
 import com.dalhousie.habit.request.LoginRequest
 import com.dalhousie.habit.request.RegisterRequest
+import com.dalhousie.habit.response.ForgotPasswordResponse
 import com.dalhousie.habit.response.LoginResponse
 import com.dalhousie.habit.response.RegisterResponse
 import com.dalhousie.habit.service.AuthService
@@ -26,6 +28,14 @@ class AuthController(private val authService: AuthService) {
     @PostMapping("/login")
     fun loginUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
         val body = authService.loginUser(loginRequest)
+        return ResponseEntity(body, HttpStatus.OK)
+    }
+
+    @PostMapping("/forgot-password")
+    fun forgotPassword(
+        @Valid @RequestBody forgotPasswordRequest: ForgotPasswordRequest
+    ): ResponseEntity<ForgotPasswordResponse> {
+        val body = authService.forgotPassword(forgotPasswordRequest)
         return ResponseEntity(body, HttpStatus.OK)
     }
 }
