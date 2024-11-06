@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: Habit
+  data:
+    mongodb:
+      uri: mongodb+srv://shahvraj2016:aBn8wTJdURwagPUP@habit-cluster.48qlp.mongodb.net/?retryWrites=true&w=majority&appName=habit-cluster
+      database: habit
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreplyhabitapp@gmail.com
+    password: mhax zukp sisz jljc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
