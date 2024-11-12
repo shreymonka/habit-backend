@@ -7,15 +7,9 @@ import com.dalhousie.habit.exception.UserNotFoundException
 import com.dalhousie.habit.model.Otp
 import com.dalhousie.habit.repository.OtpRepository
 import com.dalhousie.habit.repository.UserRepository
-import com.dalhousie.habit.request.ForgotPasswordRequest
-import com.dalhousie.habit.request.LoginRequest
-import com.dalhousie.habit.request.OtpVerificationRequest
-import com.dalhousie.habit.request.RegisterRequest
-import com.dalhousie.habit.response.ForgotPasswordResponse
-import com.dalhousie.habit.response.LoginResponse
+import com.dalhousie.habit.request.*
+import com.dalhousie.habit.response.*
 import com.dalhousie.habit.response.LoginResponse.Data
-import com.dalhousie.habit.response.OtpVerificationResponse
-import com.dalhousie.habit.response.RegisterResponse
 import com.dalhousie.habit.util.EmailSender
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -50,6 +44,13 @@ interface AuthService {
      * @return [OtpVerificationResponse] object
      */
     fun verifyOtp(request: OtpVerificationRequest): OtpVerificationResponse
+
+    /**
+     * Handles reset password request
+     * @param request Request model containing necessary details for resetting password
+     * @return [ResetPasswordResponse] object
+     */
+    fun resetPassword(resetPasswordRequest: ResetPasswordRequest): ResetPasswordResponse
 }
 
 @Service
@@ -105,5 +106,14 @@ class AuthServiceImpl(
         }
         otpRepository.delete(otp)
         return OtpVerificationResponse.success()
+    }
+
+    override fun resetPassword(resetPasswordRequest: ResetPasswordRequest): ResetPasswordResponse {
+       val user = userRepository.findByEmail(resetPasswordRequest.email)
+           ?: throw UserNotFoundException(resetPasswordRequest.email)
+
+       val newUser = user.copy(userPassword = resetPasswordRequest.password)
+       userRepository.save(newUser)
+       return ResetPasswordResponse.success()
     }
 }
