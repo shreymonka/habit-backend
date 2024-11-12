@@ -1,13 +1,7 @@
 package com.dalhousie.habit.controller
 
-import com.dalhousie.habit.request.ForgotPasswordRequest
-import com.dalhousie.habit.request.LoginRequest
-import com.dalhousie.habit.request.OtpVerificationRequest
-import com.dalhousie.habit.request.RegisterRequest
-import com.dalhousie.habit.response.ForgotPasswordResponse
-import com.dalhousie.habit.response.LoginResponse
-import com.dalhousie.habit.response.OtpVerificationResponse
-import com.dalhousie.habit.response.RegisterResponse
+import com.dalhousie.habit.request.*
+import com.dalhousie.habit.response.*
 import com.dalhousie.habit.service.AuthService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -46,6 +40,14 @@ class AuthController(private val authService: AuthService) {
         @Valid @RequestBody otpVerificationRequest: OtpVerificationRequest
     ): ResponseEntity<OtpVerificationResponse> {
         val body = authService.verifyOtp(otpVerificationRequest)
+        return ResponseEntity(body, HttpStatus.OK)
+    }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @Valid @RequestBody resetPasswordRequest: ResetPasswordRequest
+    ): ResponseEntity<ResetPasswordResponse>{
+        val body = authService.resetPassword(resetPasswordRequest)
         return ResponseEntity(body, HttpStatus.OK)
     }
 }
