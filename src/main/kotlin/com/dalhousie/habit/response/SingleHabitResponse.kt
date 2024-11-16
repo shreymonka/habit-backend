@@ -1,17 +1,18 @@
 package com.dalhousie.habit.response
 
+import com.dalhousie.habit.model.Habit
 import com.dalhousie.habit.response.ResponseBody.ResultType
 import com.dalhousie.habit.response.ResponseBody.ResultType.SUCCESS
-import com.dalhousie.habit.util.Constants.REGISTER_REQUEST_SUCCESS
 
-data class RegisterResponse(
+data class SingleHabitResponse(
     override val resultType: ResultType,
-    override val data: Boolean,
+    override val data: Habit,
     override val message: String
-) : ResponseBody<Boolean> {
+) : ResponseBody<Habit> {
 
     companion object {
-        fun success(): RegisterResponse =
-            RegisterResponse(SUCCESS, true, REGISTER_REQUEST_SUCCESS)
+
+        fun success(habit: Habit, message: String): SingleHabitResponse =
+            SingleHabitResponse(SUCCESS, habit, message)
     }
 }
