@@ -7,4 +7,8 @@ object Constants {
     const val FORGOT_PASSWORD_REQUEST_SUCCESS = "OTP successfully sent to the email address."
     const val OTP_VERIFICATION_SUCCESS = "OTP verified successfully."
     const val RESET_PASSWORD_SUCCESS = "Password Reset Successful."
+    const val ADD_HABIT_SUCCESS = "Add habit Successful."
+    const val EDIT_HABIT_SUCCESS = "Edit habit Successful."
+    const val GET_HABIT_SUCCESS = "Get all habits Successful."
+    const val DELETE_HABIT_SUCCESS = "Delete habit Successful."
 }
