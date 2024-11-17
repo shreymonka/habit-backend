@@ -10,4 +10,6 @@ interface HabitRepository : MongoRepository<Habit, String> {
     fun existsByNameAndUserId(name: String, userId: String): Boolean
 
     fun findAllByUserId(userId: String): List<Habit>
+
+    fun findFirstByUserIdOrderByCreationDate(userId: String): Habit?
 }

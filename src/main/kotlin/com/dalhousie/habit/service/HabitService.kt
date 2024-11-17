@@ -8,6 +8,7 @@ import com.dalhousie.habit.repository.HabitTrackerRepository
 import com.dalhousie.habit.request.AddEditHabitRequest
 import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.response.GetHabitsResponse
+import com.dalhousie.habit.response.HabitStatisticsResponse
 import com.dalhousie.habit.response.SingleHabitResponse
 import com.dalhousie.habit.response.TodayHabitsResponse
 import com.dalhousie.habit.util.Constants.ADD_HABIT_SUCCESS
@@ -16,6 +17,7 @@ import com.dalhousie.habit.util.Constants.EDIT_HABIT_SUCCESS
 import com.dalhousie.habit.util.Constants.MARK_HABIT_AS_COMPLETE_SUCCESS
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface HabitService {
 
@@ -61,6 +63,12 @@ interface HabitService {
      * @param habitId ID of the habit
      */
     fun markHabitAsComplete(userId: String, habitId: String): BooleanResponseBody
+
+    /**
+     * Provides month and year list from first habit added till today
+     * @param userId ID of the user
+     */
+    fun getHabitStatistics(userId: String): HabitStatisticsResponse
 }
 
 @Service
@@ -125,5 +133,57 @@ class HabitServiceImpl(
         val newHabitTracker = HabitTracker(habitTracker?.id, userId, habitId, completionDates)
         habitTrackerRepository.save(newHabitTracker)
         return BooleanResponseBody.success(MARK_HABIT_AS_COMPLETE_SUCCESS)
+    }
+
+    override fun getHabitStatistics(userId: String): HabitStatisticsResponse {
+        val monthYearList = habitRepository
+            .findFirstByUserIdOrderByCreationDate(userId)
+            ?.let { habit ->
+                val currentDate = LocalDateTime.now()
+                var tempDate = habit.creationDate
+
+                buildList {
+                    while (!tempDate.isAfter(currentDate)) {
+                        add(
+                            HabitStatisticsResponse.Data.MonthYearAndStatistics.MonthYear(
+                                month = tempDate.month.name.lowercase().replaceFirstChar { it.uppercase() },
+                                year = tempDate.year.toString()
+                            )
+                        )
+                        tempDate = tempDate.plusMonths(1)
+                    }
+                }
+            }.orEmpty()
+
+        val habits = habitRepository.findAllByUserId(userId)
+        val habitTrackers = habitTrackerRepository.findAllByUserId(userId)
+
+        val habitStatistics = habits.map { habit ->
+            val matchingTrackers = habitTrackers.filter { it.habitId == habit.id }
+            HabitStatisticsResponse.Data.MonthYearAndStatistics.HabitStatistics(
+                habit = habit,
+                completionDates = matchingTrackers.flatMap { it.completionDates }
+            )
+        }
+
+        val data = monthYearList.map { monthYear ->
+            val filteredHabits = habitStatistics.map { habitStat ->
+                val filteredCompletionDates = habitStat.completionDates.filter { completionDate ->
+                    completionDate.year == monthYear.year.toInt() && completionDate.month.name.equals(
+                        monthYear.month,
+                        ignoreCase = true
+                    )
+                }
+                habitStat.copy(completionDates = filteredCompletionDates)
+            }.filter {
+                it.habit.creationDate.let { creationDate ->
+                    (creationDate.year < monthYear.year.toInt()) ||
+                            ((creationDate.year == monthYear.year.toInt()) &&
+                                    (creationDate.month.value <= monthYear.monthValue()))
+                }
+            }
+            HabitStatisticsResponse.Data.MonthYearAndStatistics(monthYear = monthYear, habitStatistics = filteredHabits)
+        }
+        return HabitStatisticsResponse.success(data)
     }
 }

@@ -22,7 +22,6 @@ data class TodayHabitsResponse(
     }
 
     companion object {
-
         fun success(habitAndStatusList: List<Data.Data>): TodayHabitsResponse =
             TodayHabitsResponse(SUCCESS, Data(habitAndStatusList), GET_TODAY_HABITS_SUCCESS)
     }

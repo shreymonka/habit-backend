@@ -16,7 +16,6 @@ data class GetHabitsResponse(
     )
 
     companion object {
-
         fun success(habits: List<Habit>): GetHabitsResponse =
             GetHabitsResponse(SUCCESS, Data(habits), GET_HABIT_SUCCESS)
     }

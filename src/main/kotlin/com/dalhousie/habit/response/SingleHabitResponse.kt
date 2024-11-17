@@ -11,7 +11,6 @@ data class SingleHabitResponse(
 ) : ResponseBody<Habit> {
 
     companion object {
-
         fun success(habit: Habit, message: String): SingleHabitResponse =
             SingleHabitResponse(SUCCESS, habit, message)
     }
