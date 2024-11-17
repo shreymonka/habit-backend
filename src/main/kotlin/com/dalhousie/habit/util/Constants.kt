@@ -11,4 +11,6 @@ object Constants {
     const val EDIT_HABIT_SUCCESS = "Edit habit Successful."
     const val GET_HABIT_SUCCESS = "Get all habits Successful."
     const val DELETE_HABIT_SUCCESS = "Delete habit Successful."
+    const val GET_TODAY_HABITS_SUCCESS = "Get today habits Successful."
+    const val MARK_HABIT_AS_COMPLETE_SUCCESS = "Mark habit as complete successful"
 }

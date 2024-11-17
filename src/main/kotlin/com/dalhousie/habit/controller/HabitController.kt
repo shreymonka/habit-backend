@@ -2,9 +2,11 @@ package com.dalhousie.habit.controller
 
 import com.dalhousie.habit.model.User
 import com.dalhousie.habit.request.AddEditHabitRequest
+import com.dalhousie.habit.request.MarkHabitAsCompleteRequest
 import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.response.GetHabitsResponse
 import com.dalhousie.habit.response.SingleHabitResponse
+import com.dalhousie.habit.response.TodayHabitsResponse
 import com.dalhousie.habit.service.HabitService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -49,6 +51,21 @@ class HabitController(private val habitService: HabitService) {
     @DeleteMapping("/delete-habit")
     fun deleteHabit(@RequestParam id: String): ResponseEntity<BooleanResponseBody> {
         val body = habitService.deleteHabit(id)
+        return ResponseEntity(body, HttpStatus.OK)
+    }
+
+    @GetMapping("/today-habits")
+    fun getTodayHabits(@AuthenticationPrincipal user: User): ResponseEntity<TodayHabitsResponse> {
+        val body = habitService.getTodayHabits(user.id.orEmpty())
+        return ResponseEntity(body, HttpStatus.OK)
+    }
+
+    @PostMapping("/mark-habit-as-complete")
+    fun markHabitAsComplete(
+        @AuthenticationPrincipal user: User,
+        @RequestBody request: MarkHabitAsCompleteRequest
+    ): ResponseEntity<BooleanResponseBody> {
+        val body = habitService.markHabitAsComplete(user.id.orEmpty(), request.habitId)
         return ResponseEntity(body, HttpStatus.OK)
     }
 }
