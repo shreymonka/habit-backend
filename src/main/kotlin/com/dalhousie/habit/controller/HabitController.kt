@@ -5,6 +5,7 @@ import com.dalhousie.habit.request.AddEditHabitRequest
 import com.dalhousie.habit.request.MarkHabitAsCompleteRequest
 import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.response.GetHabitsResponse
+import com.dalhousie.habit.response.HabitStatisticsResponse
 import com.dalhousie.habit.response.SingleHabitResponse
 import com.dalhousie.habit.response.TodayHabitsResponse
 import com.dalhousie.habit.service.HabitService
@@ -54,7 +55,7 @@ class HabitController(private val habitService: HabitService) {
         return ResponseEntity(body, HttpStatus.OK)
     }
 
-    @GetMapping("/today-habits")
+    @GetMapping("/get-today-habits")
     fun getTodayHabits(@AuthenticationPrincipal user: User): ResponseEntity<TodayHabitsResponse> {
         val body = habitService.getTodayHabits(user.id.orEmpty())
         return ResponseEntity(body, HttpStatus.OK)
@@ -66,6 +67,12 @@ class HabitController(private val habitService: HabitService) {
         @RequestBody request: MarkHabitAsCompleteRequest
     ): ResponseEntity<BooleanResponseBody> {
         val body = habitService.markHabitAsComplete(user.id.orEmpty(), request.habitId)
+        return ResponseEntity(body, HttpStatus.OK)
+    }
+
+    @GetMapping("/habit-statistics")
+    fun getHabitStatistics(@AuthenticationPrincipal user: User): ResponseEntity<HabitStatisticsResponse> {
+        val body = habitService.getHabitStatistics(user.id.orEmpty())
         return ResponseEntity(body, HttpStatus.OK)
     }
 }

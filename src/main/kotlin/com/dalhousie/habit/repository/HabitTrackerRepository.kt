@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 interface HabitTrackerRepository : MongoRepository<HabitTracker, String> {
 
     fun findByUserIdAndHabitId(userId: String, habitId: String): HabitTracker?
+
+    fun findAllByUserId(userId: String): List<HabitTracker>
 }
