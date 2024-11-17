@@ -3,6 +3,7 @@ package com.dalhousie.habit.model
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
+import java.time.DayOfWeek
 import java.time.LocalDateTime
 
 @Document(collection = "habit")
@@ -21,4 +22,8 @@ data class Habit(
 
     @Field(name = "schedule")
     val schedule: List<String>
-)
+) {
+
+    fun getScheduleInDayOfWeek(): List<DayOfWeek> =
+        schedule.map { DayOfWeek.valueOf(it.uppercase()) }
+}
