@@ -11,6 +11,9 @@ data class User(
     @Id
     val id: String? = null,
 
+    @Field(name = "profile_pic_id")
+    val profilePicId: Int = 0,
+
     @Field(name = "username")
     val userName: String,
 
@@ -26,4 +29,12 @@ data class User(
     override fun getPassword(): String = userPassword
 
     override fun getUsername(): String = email
+
+    fun toPublicUser(habits: List<Habit>): PublicUser = PublicUser(
+        id = id ?: "",
+        profilePicId = profilePicId,
+        userName = userName,
+        email = email,
+        habits = habits
+    )
 }
