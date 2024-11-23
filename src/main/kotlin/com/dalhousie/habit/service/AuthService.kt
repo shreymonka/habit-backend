@@ -121,7 +121,7 @@ class AuthServiceImpl(
        val user = userRepository.findByEmail(request.email)
            ?: throw UserNotFoundException(request.email)
 
-       val newUser = user.copy(userPassword = request.password)
+       val newUser = user.copy(userPassword = passwordEncoder.encode(request.password))
        userRepository.save(newUser)
        return BooleanResponseBody.success(RESET_PASSWORD_SUCCESS)
     }
