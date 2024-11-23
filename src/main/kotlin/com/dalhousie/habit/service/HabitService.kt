@@ -91,13 +91,9 @@ class HabitServiceImpl(
     }
 
     override fun editHabit(userId: String, request: AddEditHabitRequest): SingleHabitResponse {
-        if (!habitRepository.existsByNameAndUserId(request.name, userId))
-            throw HabitNotFoundException(request.name)
+        val habit = habitRepository.findById(request.id.orEmpty())
+            .orElseThrow { throw HabitNotFoundException(request.name) }
 
-        val habit = habitRepository.findById(request.id.orEmpty()).let {
-            if (it.isEmpty) throw HabitNotFoundException(request.name)
-            it.get()
-        }
         val updatedHabit = habitRepository.save(habit.copy(name = request.name, schedule = request.schedule))
         return SingleHabitResponse.success(updatedHabit, EDIT_HABIT_SUCCESS)
     }
