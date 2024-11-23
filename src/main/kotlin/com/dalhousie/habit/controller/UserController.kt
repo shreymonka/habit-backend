@@ -23,7 +23,7 @@ class UserController(private val userService: UserService) {
 
     @GetMapping
     fun getUserData(@AuthenticationPrincipal user: User): ResponseEntity<GetUserDataResponse> {
-        val response = GetUserDataResponse.success(user.toPublicUser())
+        val response = userService.getUserData(user)
         return ResponseEntity.ok(response)
     }
 

@@ -7,6 +7,7 @@ import com.dalhousie.habit.repository.UserRepository
 import com.dalhousie.habit.request.UpdatePasswordRequest
 import com.dalhousie.habit.request.UpdateUsernameRequest
 import com.dalhousie.habit.response.BooleanResponseBody
+import com.dalhousie.habit.response.GetUserDataResponse
 import com.dalhousie.habit.response.SearchUserResponse
 import com.dalhousie.habit.util.Constants.UPDATE_PASSWORD_SUCCESS
 import com.dalhousie.habit.util.Constants.UPDATE_USERNAME_SUCCESS
@@ -14,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 interface UserService {
+
+    fun getUserData(user: User): GetUserDataResponse
+
     fun searchUsers(query: String): SearchUserResponse
 
     fun updateUsername(user: User, request: UpdateUsernameRequest): BooleanResponseBody
@@ -27,6 +31,11 @@ class UserServiceImpl(
     private val habitRepository: HabitRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserService {
+
+    override fun getUserData(user: User): GetUserDataResponse {
+        val habits = habitRepository.findAllByUserId(user.id.orEmpty())
+        return GetUserDataResponse.success(user.toPublicUser(habits))
+    }
 
     override fun searchUsers(query: String): SearchUserResponse {
         val publicUsersList = userRepository
