@@ -91,8 +91,8 @@ class HabitServiceImpl(
     }
 
     override fun editHabit(userId: String, request: AddEditHabitRequest): SingleHabitResponse {
-        if (habitRepository.existsByNameAndUserId(request.name, userId))
-            throw HabitAlreadyAddedException(request.name)
+        if (!habitRepository.existsByNameAndUserId(request.name, userId))
+            throw HabitNotFoundException(request.name)
 
         val habit = habitRepository.findById(request.id.orEmpty()).let {
             if (it.isEmpty) throw HabitNotFoundException(request.name)
