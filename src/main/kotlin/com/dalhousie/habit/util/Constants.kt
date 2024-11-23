@@ -15,4 +15,5 @@ object Constants {
     const val MARK_HABIT_AS_COMPLETE_SUCCESS = "Mark habit as complete successful"
     const val GET_HABIT_STATISTICS_SUCCESS = "Get habit statistics successful."
     const val SEARCH_USER_SUCCESS = "Search user successful."
+    const val GET_USER_DATA_SUCCESS = "Get user data successful."
 }
