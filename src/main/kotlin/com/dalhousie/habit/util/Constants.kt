@@ -16,4 +16,6 @@ object Constants {
     const val GET_HABIT_STATISTICS_SUCCESS = "Get habit statistics successful."
     const val SEARCH_USER_SUCCESS = "Search user successful."
     const val GET_USER_DATA_SUCCESS = "Get user data successful."
+    const val UPDATE_USERNAME_SUCCESS = "Update username successful."
+    const val UPDATE_PASSWORD_SUCCESS = "Update password successful."
 }
