@@ -30,7 +30,7 @@ data class User(
 
     override fun getUsername(): String = email
 
-    fun toPublicUser(habits: List<Habit>): PublicUser = PublicUser(
+    fun toPublicUser(habits: List<Habit> = emptyList()): PublicUser = PublicUser(
         id = id ?: "",
         profilePicId = profilePicId,
         userName = userName,
