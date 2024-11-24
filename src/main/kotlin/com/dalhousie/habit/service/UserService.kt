@@ -55,7 +55,7 @@ class UserServiceImpl(
         if (!passwordEncoder.matches(request.oldPassword, user.userPassword))
             throw InvalidPasswordException(user.email)
 
-        val updatedUser = user.copy(userPassword = request.newPassword)
+        val updatedUser = user.copy(userPassword = passwordEncoder.encode(request.newPassword))
         userRepository.save(updatedUser)
         return BooleanResponseBody.success(UPDATE_PASSWORD_SUCCESS)
     }
