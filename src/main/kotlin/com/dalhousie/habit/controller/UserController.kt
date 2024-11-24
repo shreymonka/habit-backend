@@ -2,6 +2,7 @@ package com.dalhousie.habit.controller
 
 import com.dalhousie.habit.model.User
 import com.dalhousie.habit.request.UpdatePasswordRequest
+import com.dalhousie.habit.request.UpdateProfilePicRequest
 import com.dalhousie.habit.request.UpdateUsernameRequest
 import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.response.GetUserDataResponse
@@ -51,6 +52,15 @@ class UserController(private val userService: UserService) {
         @Valid @RequestBody request: UpdatePasswordRequest
     ): ResponseEntity<BooleanResponseBody> {
         val response = userService.updatePassword(user, request)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/update-profile-pic")
+    fun updateProfilePic(
+        @AuthenticationPrincipal user: User,
+        @RequestBody request: UpdateProfilePicRequest
+    ): ResponseEntity<BooleanResponseBody> {
+        val response = userService.updateProfilePic(user, request)
         return ResponseEntity.ok(response)
     }
 }

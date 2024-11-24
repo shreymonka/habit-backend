@@ -5,11 +5,13 @@ import com.dalhousie.habit.model.User
 import com.dalhousie.habit.repository.HabitRepository
 import com.dalhousie.habit.repository.UserRepository
 import com.dalhousie.habit.request.UpdatePasswordRequest
+import com.dalhousie.habit.request.UpdateProfilePicRequest
 import com.dalhousie.habit.request.UpdateUsernameRequest
 import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.response.GetUserDataResponse
 import com.dalhousie.habit.response.SearchUserResponse
 import com.dalhousie.habit.util.Constants.UPDATE_PASSWORD_SUCCESS
+import com.dalhousie.habit.util.Constants.UPDATE_PROFILE_PIC_SUCCESS
 import com.dalhousie.habit.util.Constants.UPDATE_USERNAME_SUCCESS
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -23,6 +25,8 @@ interface UserService {
     fun updateUsername(user: User, request: UpdateUsernameRequest): BooleanResponseBody
 
     fun updatePassword(user: User, request: UpdatePasswordRequest): BooleanResponseBody
+
+    fun updateProfilePic(user: User, request: UpdateProfilePicRequest): BooleanResponseBody
 }
 
 @Service
@@ -58,5 +62,11 @@ class UserServiceImpl(
         val updatedUser = user.copy(userPassword = passwordEncoder.encode(request.newPassword))
         userRepository.save(updatedUser)
         return BooleanResponseBody.success(UPDATE_PASSWORD_SUCCESS)
+    }
+
+    override fun updateProfilePic(user: User, request: UpdateProfilePicRequest): BooleanResponseBody {
+        val updatedUser = user.copy(profilePicId = request.profilePicId)
+        userRepository.save(updatedUser)
+        return BooleanResponseBody.success(UPDATE_PROFILE_PIC_SUCCESS)
     }
 }

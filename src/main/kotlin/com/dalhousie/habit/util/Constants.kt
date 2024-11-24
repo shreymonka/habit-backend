@@ -18,4 +18,5 @@ object Constants {
     const val GET_USER_DATA_SUCCESS = "Get user data successful."
     const val UPDATE_USERNAME_SUCCESS = "Update username successful."
     const val UPDATE_PASSWORD_SUCCESS = "Update password successful."
+    const val UPDATE_PROFILE_PIC_SUCCESS = "Update profile pic successful."
 }
