@@ -28,8 +28,11 @@ class UserController(private val userService: UserService) {
     }
 
     @GetMapping("/search")
-    fun searchUsers(@RequestParam query: String): ResponseEntity<SearchUserResponse> {
-        val response = userService.searchUsers(query)
+    fun searchUsers(
+        @AuthenticationPrincipal user: User,
+        @RequestParam query: String
+    ): ResponseEntity<SearchUserResponse> {
+        val response = userService.searchUsers(user.id.orEmpty(), query)
         return ResponseEntity.ok(response)
     }
 
