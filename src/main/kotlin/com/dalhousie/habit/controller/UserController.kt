@@ -45,7 +45,7 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok(response)
     }
 
-    @PostMapping("/update-userpassword")
+    @PostMapping("/update-password")
     fun updatePassword(
         @AuthenticationPrincipal user: User,
         @Valid @RequestBody request: UpdatePasswordRequest
