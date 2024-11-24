@@ -18,7 +18,7 @@ interface UserService {
 
     fun getUserData(user: User): GetUserDataResponse
 
-    fun searchUsers(query: String): SearchUserResponse
+    fun searchUsers(loggedInUserId: String, query: String): SearchUserResponse
 
     fun updateUsername(user: User, request: UpdateUsernameRequest): BooleanResponseBody
 
@@ -37,12 +37,11 @@ class UserServiceImpl(
         return GetUserDataResponse.success(user.toPublicUser(habits))
     }
 
-    override fun searchUsers(query: String): SearchUserResponse {
+    override fun searchUsers(loggedInUserId: String, query: String): SearchUserResponse {
         val publicUsersList = userRepository
             .findByUserNameContainingIgnoreCaseOrEmailContainingIgnoreCase(query, query)
-            .map {
-                it.toPublicUser(habitRepository.findAllByUserId(it.id.orEmpty()))
-            }
+            .filter { it.id != loggedInUserId }
+            .map { it.toPublicUser(habitRepository.findAllByUserId(it.id.orEmpty())) }
         return SearchUserResponse.success(publicUsersList)
     }
 
