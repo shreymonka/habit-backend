@@ -136,7 +136,8 @@ class HabitServiceImpl(
             .findFirstByUserIdOrderByCreationDate(userId)
             ?.let { habit ->
                 val currentDate = LocalDateTime.now()
-                var tempDate = habit.creationDate
+                val creationDate = habit.creationDate
+                var tempDate = LocalDateTime.of(creationDate.year, creationDate.month, 1, 0, 0)
 
                 buildList {
                     while (!tempDate.isAfter(currentDate)) {
