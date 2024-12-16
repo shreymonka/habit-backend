@@ -37,18 +37,6 @@ class JwtServiceImpl : JwtService {
             .also { it.claims().add(extraClaims) }
             .subject(userDetails.username)
             .issuedAt(Date(System.currentTimeMillis()))
-            // For now setting token expiration to 10 days
-            // [TODO]: Setup refresh token concept for updating expired tokens
-            .expiration(
-                Date(
-                System.currentTimeMillis() +
-                        1000L /*Milliseconds*/ *
-                        60 /*Seconds*/ *
-                        60 /*Minutes*/ *
-                        24 /*Hours*/ *
-                        10 /*Days*/
-            )
-            )
             .signWith(getSignInKey())
             .compact()
     }
