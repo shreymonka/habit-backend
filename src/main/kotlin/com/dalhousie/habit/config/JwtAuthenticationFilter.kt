@@ -1,6 +1,8 @@
 package com.dalhousie.habit.config
 
+import com.dalhousie.habit.response.BooleanResponseBody
 import com.dalhousie.habit.service.JwtService
+import com.google.gson.Gson
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import jakarta.servlet.FilterChain
@@ -61,7 +63,9 @@ class JwtAuthenticationFilter(
             when (exception) {
                 is ExpiredJwtException, is MalformedJwtException -> {
                     response.status = HttpStatus.UNAUTHORIZED.value()
-                    response.writer.write("User is Unauthorized. -> " + exception.message)
+                    response.writer.write(
+                        Gson().toJson(BooleanResponseBody.failure("User is Unauthorized. -> " + exception.message))
+                    )
                     null
                 }
                 else -> null

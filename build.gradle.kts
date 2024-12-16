@@ -40,6 +40,9 @@ dependencies {
 	// Jakarta validations
 	implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 	implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+
+	// Gson
+	implementation("com.google.code.gson:gson:2.11.0")
 }
 
 kotlin {
